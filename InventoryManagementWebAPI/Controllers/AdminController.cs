@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace InventoryManagementWebAPI.Controllers
 {
+    [Authorize(Roles = "Owner")]
     [RoutePrefix("api/admin")]
     public class AdminController : ApiController
     {
@@ -16,9 +17,17 @@ namespace InventoryManagementWebAPI.Controllers
 
         [HttpGet]
         [Route("viewallitems")]
-        public IEnumerable<Product> ViewAllItems()
+        public IHttpActionResult ViewAllItems()
         {
-            return dataContext.Products.ToList();
+            IEnumerable<Product> products = dataContext.Products.ToList();
+            if (products.Count() > 0)
+            {
+                return Ok(products);
+            }
+            else
+            {
+                return Ok("No Products In Warehouse");
+            }
         }
 
         [HttpGet]
@@ -38,7 +47,7 @@ namespace InventoryManagementWebAPI.Controllers
 
             if (!found)
             {
-                return BadRequest("No records found");
+                return Ok("No records found");
             }
 
             return Ok(invoices);
@@ -61,7 +70,7 @@ namespace InventoryManagementWebAPI.Controllers
             }
             if (!found)
             {
-                return BadRequest("No records found");
+                return Ok("No records found");
             }
 
             return Ok(invoices);

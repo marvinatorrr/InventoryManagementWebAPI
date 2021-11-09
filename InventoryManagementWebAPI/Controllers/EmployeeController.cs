@@ -6,9 +6,11 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using System.Web.Http;
+using System.Text;
 
 namespace InventoryManagementWebAPI.Controllers
 {
+    [Authorize(Roles = "Employee")]
     [RoutePrefix("api/employee")]
     public class EmployeeController : ApiController
     {
@@ -50,7 +52,8 @@ namespace InventoryManagementWebAPI.Controllers
         {
             dataContext.Products.Add(product);
             dataContext.SaveChanges();
-            return Ok("Product added");
+            LogTransaction(product, product.quantity, InvoiceType.Sale);
+            return Ok($"Successfully received Product ID: {product.ID}. Quantity: {product.quantity}. Current Stock: {product.quantity}");
         }
 
         [HttpPatch]
@@ -63,7 +66,8 @@ namespace InventoryManagementWebAPI.Controllers
                 product.quantity = product.quantity + quantity;
                 dataContext.Entry(product).State = EntityState.Modified;
                 dataContext.SaveChanges();
-                return Ok("Product added");
+                LogTransaction(product, quantity, InvoiceType.Shipment);
+                return Ok($"Successfully received Product ID: {id}. Quantity: {quantity}. Current Stock: {product.quantity}");
             }
             else
             {
@@ -86,7 +90,8 @@ namespace InventoryManagementWebAPI.Controllers
                 product.quantity = product.quantity - quantity;
                 dataContext.Entry(product).State = EntityState.Modified;
                 dataContext.SaveChanges();
-                return Ok("Product sold");
+                LogTransaction(product, quantity, InvoiceType.Sale);
+                return Ok($"Successfully sold Product ID: {id}. Quantity: {quantity}. Current Stock: {product.quantity}");
             }
             else
             {
@@ -94,9 +99,9 @@ namespace InventoryManagementWebAPI.Controllers
             }
         }
 
-        private void LogTransaction(Product product, int quantity, InvoiceType invoiceType, User user)
+        private void LogTransaction(Product product, int quantity, InvoiceType invoiceType)
         {
-            Invoice invoice = new Invoice() { TransactionTime = DateTime.Now, AssociatedEmployee = user, Type = invoiceType };
+            Invoice invoice = new Invoice() { TransactionTime = DateTime.Now, AssociatedEmployee = GetUserFromAuthHeaer(), Type = invoiceType.ToString() };
 
             invoice.Cost = product.BasePrice * quantity;
             invoice.Revenue = product.MSRP * quantity;
@@ -107,6 +112,17 @@ namespace InventoryManagementWebAPI.Controllers
 
             dataContext.Invoices.Add(invoice);
             dataContext.SaveChanges();
+        }
+
+        private User GetUserFromAuthHeaer()
+        {
+            var tokens = HttpContext.Current.Request.Headers.GetValues("Authorization").FirstOrDefault();
+            string[] base64encoded = tokens.Split(' ');
+            byte[] data = Convert.FromBase64String(base64encoded[1]);
+            string decodedString = Encoding.UTF8.GetString(data);
+            string[] tokensValues = decodedString.Split(':');
+            string id = tokensValues[0];
+            return dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
         }
     }
 }

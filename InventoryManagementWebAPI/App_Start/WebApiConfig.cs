@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using static InventoryManagementWebAPI.Auth.CredentialChecker;
 
 namespace InventoryManagementWebAPI
 {
@@ -13,7 +14,7 @@ namespace InventoryManagementWebAPI
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
+            config.MessageHandlers.Add(new AuthenticationHandler());
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

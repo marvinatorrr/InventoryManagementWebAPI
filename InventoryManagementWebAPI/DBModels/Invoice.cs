@@ -16,6 +16,6 @@ namespace InventoryManagementWebAPI.DBModels
         public decimal Revenue { get;  set; }
         public decimal Cost { get;  set; }
         public decimal Profit { get;  set; }
-        public InvoiceType Type { get;  set; }
+        public string Type { get;  set; }
     }
 }
