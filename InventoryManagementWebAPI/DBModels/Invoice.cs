@@ -9,7 +9,7 @@ namespace InventoryManagementWebAPI.DBModels
     {
         public int ID { get; set; }
         public DateTime TransactionTime { get;  set; }
-        public User AssociatedEmployee { get;  set; }
+        public virtual User AssociatedEmployee { get;  set; }
         public int ItemID { get;  set; }
         public int Quantity { get;  set; }
         public decimal Taxes { get;  set; }

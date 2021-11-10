@@ -52,8 +52,8 @@ namespace InventoryManagementWebAPI.Controllers
         {
             dataContext.Products.Add(product);
             dataContext.SaveChanges();
-            LogTransaction(product, product.quantity, InvoiceType.Sale);
-            return Ok($"Successfully received Product ID: {product.ID}. Quantity: {product.quantity}. Current Stock: {product.quantity}");
+            LogTransaction(product, product.quantity, InvoiceType.Shipment);
+            return Ok($"Successfully received {product.Name}. Quantity: {product.quantity}. Product ID: {product.ID}");
         }
 
         [HttpPatch]

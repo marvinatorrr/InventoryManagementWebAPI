@@ -195,6 +195,10 @@
     <Compile Include="Migrations\202111090838567_changedsaletypeenumtostring.designer.cs">
       <DependentUpon>202111090838567_changedsaletypeenumtostring.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111101054178_virtualuser.cs" />
+    <Compile Include="Migrations\202111101054178_virtualuser.designer.cs">
+      <DependentUpon>202111101054178_virtualuser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -296,6 +300,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111090838567_changedsaletypeenumtostring.resx">
       <DependentUpon>202111090838567_changedsaletypeenumtostring.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111101054178_virtualuser.resx">
+      <DependentUpon>202111101054178_virtualuser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

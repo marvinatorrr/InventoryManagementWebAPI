@@ -31,30 +31,15 @@ namespace InventoryManagementWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("viewtransactions")]
+        [Route("viewtransactionsbyemp")]
         public IHttpActionResult ViewEmployeeTransactions(string empID)
         {
-            bool found = false;
-            List<Invoice> invoices = new List<Invoice>();
-            foreach (Invoice invoice in dataContext.Invoices.ToList())
-            {
-                if (invoice.AssociatedEmployee.Id == empID)
-                {
-                    found = true;
-                    invoices.Add(invoice);
-                }
-            }
-
-            if (!found)
-            {
-                return Ok("No records found");
-            }
-
+            IEnumerable<Invoice> invoices = dataContext.Invoices.Where(x => x.AssociatedEmployee.Id == empID);  
             return Ok(invoices);
         }
 
         [HttpGet]
-        [Route("viewtransactions")]
+        [Route("viewtransactionsbydate")]
         public IHttpActionResult ViewDailyTransactions(DateTime date)
         {
             List<Invoice> invoices = new List<Invoice>();
