@@ -17,10 +17,8 @@ namespace InventoryManagementWebAPI.Auth
     {
         public User CheckCredential(string username, string password)
         {
-            using (var db = new DataContext())
-            {
-                return db.Users.Where(un => un.Id == username && un.Password == password).FirstOrDefault();
-            }
+            DataContext dataContext = new DataContext();
+            return dataContext.Users.Where(un => un.Id == username && un.Password == password).FirstOrDefault();
         }
 
         public class AuthenticationHandler : DelegatingHandler
@@ -44,32 +42,12 @@ namespace InventoryManagementWebAPI.Auth
                             Thread.CurrentPrincipal = principal;
                             HttpContext.Current.User = principal;
                         }
-                        else
-                        {
-                            //The user is unauthorize and return 401 status  
-                            var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
-                            var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                            tsc.SetResult(response);
-                            return tsc.Task;
-                        }
-                    }
-                    else
-                    {
-                        //Bad Request request because Authentication header is set but value is null  
-                        var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                        var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                        tsc.SetResult(response);
-                        return tsc.Task;
                     }
                     return base.SendAsync(request, cancellationToken);
                 }
                 catch
                 {
-                    //User did not set Authentication header  
-                    var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                    var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                    tsc.SetResult(response);
-                    return tsc.Task;
+                    return base.SendAsync(request, cancellationToken);
                 }
             }
 
