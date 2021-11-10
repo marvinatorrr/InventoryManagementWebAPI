@@ -1,10 +1,14 @@
 # InventoryManagementWebAPI
 
-# InventoryManagementSystem
-
 * This is the webapi of the the inventory management system
 * It processes requests from whoever and sends back an appropriate response
 
+# SQL Server
+* The application connects to an SQL server for data persistance
+
+# To access methods in the employee and admin controllers, a basic authentication header must be attached to the requests, else an unauthorised response is sent back.
+
+# Requirements
 * Requirements of the inventory management system
 * An item should have the following properties:
   - ID
