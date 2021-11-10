@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace InventoryManagementWebAPI.Controllers
 {
@@ -20,7 +21,7 @@ namespace InventoryManagementWebAPI.Controllers
         {
             if (!dataContext.Users.Any(x => x.Id == Id))
             {
-                dataContext.Users.Add(new User() { Name = name, Id = Id, Password = password, Type = UserType.Employee });
+                dataContext.Users.Add(new User() { Name = name, Id = Id, Password = password, Type = UserType.Employee.ToString() });
                 dataContext.SaveChanges();
                 return Ok("User Successfully Created");
             }

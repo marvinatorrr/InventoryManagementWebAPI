@@ -163,6 +163,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Auth\CredentialChecker.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -185,6 +186,18 @@
     <Compile Include="Migrations\202111090618125_addinvoiceid.cs" />
     <Compile Include="Migrations\202111090618125_addinvoiceid.designer.cs">
       <DependentUpon>202111090618125_addinvoiceid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111090737380_changedroleenumtostring.cs" />
+    <Compile Include="Migrations\202111090737380_changedroleenumtostring.designer.cs">
+      <DependentUpon>202111090737380_changedroleenumtostring.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111090838567_changedsaletypeenumtostring.cs" />
+    <Compile Include="Migrations\202111090838567_changedsaletypeenumtostring.designer.cs">
+      <DependentUpon>202111090838567_changedsaletypeenumtostring.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111101054178_virtualuser.cs" />
+    <Compile Include="Migrations\202111101054178_virtualuser.designer.cs">
+      <DependentUpon>202111101054178_virtualuser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -219,6 +232,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\IISProfile1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -279,6 +294,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111090618125_addinvoiceid.resx">
       <DependentUpon>202111090618125_addinvoiceid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111090737380_changedroleenumtostring.resx">
+      <DependentUpon>202111090737380_changedroleenumtostring.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111090838567_changedsaletypeenumtostring.resx">
+      <DependentUpon>202111090838567_changedsaletypeenumtostring.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111101054178_virtualuser.resx">
+      <DependentUpon>202111101054178_virtualuser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
