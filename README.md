@@ -6,7 +6,7 @@
 # SQL Server
 * The application connects to an SQL server for data persistance
 
-# To access methods in the employee and admin controllers, a basic authentication header must be attached to the requests, else an unauthorised response is sent back.
+* To access methods in the employee and admin controllers, a basic authentication header must be attached to the requests, else an unauthorised response is sent back.
 
 # Requirements
 * Requirements of the inventory management system
