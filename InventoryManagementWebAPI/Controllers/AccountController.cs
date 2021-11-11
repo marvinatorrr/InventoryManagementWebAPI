@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
+using InventoryManagementWebAPI.Auth;
+using System.Web;
+using System.Text;
 
 namespace InventoryManagementWebAPI.Controllers
 {
@@ -17,11 +20,11 @@ namespace InventoryManagementWebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IHttpActionResult CreateAccount(string name, string Id, string password)
+        public IHttpActionResult CreateAccount([FromBody] User user)
         {
-            if (!dataContext.Users.Any(x => x.Id == Id))
+            if (!dataContext.Users.Any(x => x.Id == user.Id))
             {
-                dataContext.Users.Add(new User() { Name = name, Id = Id, Password = password, Type = UserType.Employee.ToString() });
+                dataContext.Users.Add(new User() { Name = user.Name, Id = user.Id, Password = Hash.HashFunction(user.Password), Type = UserType.Employee.ToString() });
                 dataContext.SaveChanges();
                 return Ok("User Successfully Created");
             }
@@ -31,19 +34,18 @@ namespace InventoryManagementWebAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Employee,Owner")]
         [HttpGet]
         [Route("login")]
-        public IHttpActionResult Login(string Id, string password)
+        public IHttpActionResult Login()
         {
-            var user = dataContext.Users.Where(x => x.Id == Id && x.Password == password);
-            if (user != null)
-            {
-                return Ok(user);
-            }
-            else
-            {
-                return BadRequest("Invalid Crendentials");
-            }
+            var tokens = HttpContext.Current.Request.Headers.GetValues("Authorization").FirstOrDefault();
+            string[] base64encoded = tokens.Split(' ');
+            byte[] data = Convert.FromBase64String(base64encoded[1]);
+            string decodedString = Encoding.UTF8.GetString(data);
+            string[] tokensValues = decodedString.Split(':');
+            string id = tokensValues[0];
+            return Ok(dataContext.Users.Where(x => x.Id == id).FirstOrDefault());
         }
     }
 }
