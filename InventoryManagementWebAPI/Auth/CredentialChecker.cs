@@ -18,7 +18,16 @@ namespace InventoryManagementWebAPI.Auth
         public User CheckCredential(string username, string password)
         {
             DataContext dataContext = new DataContext();
-            return dataContext.Users.Where(un => un.Id == username && un.Password == password).FirstOrDefault();
+            User user = dataContext.Users.Where(un => un.Id == username).FirstOrDefault();
+            if (user == null)
+            {
+                return null;
+            }
+            if (Hash.Verify(user.Password, password))
+            {
+                return user;
+            }
+            return null;
         }
 
         public class AuthenticationHandler : DelegatingHandler

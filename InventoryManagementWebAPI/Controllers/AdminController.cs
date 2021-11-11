@@ -34,13 +34,28 @@ namespace InventoryManagementWebAPI.Controllers
         [Route("viewtransactionsbyemp")]
         public IHttpActionResult ViewEmployeeTransactions(string empID)
         {
-            IEnumerable<Invoice> invoices = dataContext.Invoices.Where(x => x.AssociatedEmployee.Id == empID);  
+            List<Invoice> invoices = new List<Invoice>();
+
+            bool found = false;
+            foreach (Invoice invoice in dataContext.Invoices.ToList())
+            {
+                if (invoice.AssociatedEmployee.Id == empID)
+                {
+                    found = true;
+                    invoices.Add(invoice);
+                }
+            }
+            if (!found)
+            {
+                return BadRequest("No records found");
+            }
+
             return Ok(invoices);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("viewtransactionsbydate")]
-        public IHttpActionResult ViewDailyTransactions(DateTime date)
+        public IHttpActionResult ViewDailyTransactions([FromBody] DateTime date)
         {
             List<Invoice> invoices = new List<Invoice>();
 
@@ -55,7 +70,7 @@ namespace InventoryManagementWebAPI.Controllers
             }
             if (!found)
             {
-                return Ok("No records found");
+                return BadRequest("No records found");
             }
 
             return Ok(invoices);
