@@ -9,7 +9,7 @@ namespace InventoryManagementWebAPI.DBContext
 {
     public class DataContext : DbContext
     {
-        public DataContext() : base(@"Data Source=DESKTOP-E1S4OE4\SQLEXPRESS;Initial Catalog=ProductDB;Integrated Security=True;MultipleActiveResultSets=True")
+        public DataContext() : base()
         {
         }
 

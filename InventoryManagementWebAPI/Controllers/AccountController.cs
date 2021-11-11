@@ -34,6 +34,7 @@ namespace InventoryManagementWebAPI.Controllers
             }
         }
 
+
         [Authorize(Roles = "Employee,Owner")]
         [HttpGet]
         [Route("login")]

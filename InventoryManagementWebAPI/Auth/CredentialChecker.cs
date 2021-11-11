@@ -19,6 +19,10 @@ namespace InventoryManagementWebAPI.Auth
         {
             DataContext dataContext = new DataContext();
             User user = dataContext.Users.Where(un => un.Id == username).FirstOrDefault();
+            if (user == null)
+            {
+                return null;
+            }
             if (Hash.Verify(user.Password, password))
             {
                 return user;
