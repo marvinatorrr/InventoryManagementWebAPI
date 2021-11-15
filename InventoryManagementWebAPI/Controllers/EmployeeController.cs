@@ -7,6 +7,7 @@ using System.Web;
 using System.Data.Entity;
 using System.Web.Http;
 using System.Text;
+using InventoryManagementWebAPI.Interfaces;
 
 namespace InventoryManagementWebAPI.Controllers
 {
@@ -14,7 +15,17 @@ namespace InventoryManagementWebAPI.Controllers
     [RoutePrefix("api/employee")]
     public class EmployeeController : ApiController
     {
-        DataContext dataContext = new DataContext();
+        IDataContext dataContext;
+
+        public EmployeeController(IDataContext datacontext)
+        {
+            dataContext = datacontext;
+        }
+
+        public EmployeeController()
+        {
+            dataContext = new DataContext();
+        }
 
         [HttpGet]
         [Route("getproductbyid")]
@@ -116,12 +127,7 @@ namespace InventoryManagementWebAPI.Controllers
 
         private User GetUserFromAuthHeaer()
         {
-            var tokens = HttpContext.Current.Request.Headers.GetValues("Authorization").FirstOrDefault();
-            string[] base64encoded = tokens.Split(' ');
-            byte[] data = Convert.FromBase64String(base64encoded[1]);
-            string decodedString = Encoding.UTF8.GetString(data);
-            string[] tokensValues = decodedString.Split(':');
-            string id = tokensValues[0];
+            string id = RequestContext.Principal.Identity.Name;
             return dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
         }
     }

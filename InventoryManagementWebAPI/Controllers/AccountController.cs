@@ -10,13 +10,23 @@ using System.Web.Http.Results;
 using InventoryManagementWebAPI.Auth;
 using System.Web;
 using System.Text;
-
+using InventoryManagementWebAPI.Interfaces;
 namespace InventoryManagementWebAPI.Controllers
 {
     [RoutePrefix("api/account")]
     public class AccountController : ApiController
     {
-        DataContext dataContext = new DataContext();
+        IDataContext dataContext;
+
+        public AccountController(IDataContext datacontext)
+        {
+            dataContext = datacontext;
+        }
+
+        public AccountController()
+        {
+            dataContext = new DataContext();
+        }
 
         [HttpPost]
         [Route("create")]
@@ -40,12 +50,7 @@ namespace InventoryManagementWebAPI.Controllers
         [Route("login")]
         public IHttpActionResult Login()
         {
-            var tokens = HttpContext.Current.Request.Headers.GetValues("Authorization").FirstOrDefault();
-            string[] base64encoded = tokens.Split(' ');
-            byte[] data = Convert.FromBase64String(base64encoded[1]);
-            string decodedString = Encoding.UTF8.GetString(data);
-            string[] tokensValues = decodedString.Split(':');
-            string id = tokensValues[0];
+            string id = RequestContext.Principal.Identity.Name;
             return Ok(dataContext.Users.Where(x => x.Id == id).FirstOrDefault());
         }
     }

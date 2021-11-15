@@ -172,6 +172,7 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DBContext\ContextFactory.cs" />
     <Compile Include="DBContext\DataContext.cs" />
+    <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="DBModels\Invoice.cs" />
     <Compile Include="DBModels\InvoiceType.cs" />
     <Compile Include="DBModels\Product.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IHttpContext.cs" />
     <Compile Include="Migrations\202111081257158_InitialCreate.cs" />
     <Compile Include="Migrations\202111081257158_InitialCreate.designer.cs">
       <DependentUpon>202111081257158_InitialCreate.cs</DependentUpon>
