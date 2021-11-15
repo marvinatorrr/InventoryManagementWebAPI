@@ -1,5 +1,6 @@
 ﻿using InventoryManagementWebAPI.DBContext;
 using InventoryManagementWebAPI.DBModels;
+using InventoryManagementWebAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,17 @@ namespace InventoryManagementWebAPI.Controllers
     [RoutePrefix("api/admin")]
     public class AdminController : ApiController
     {
-        DataContext dataContext = new DataContext();
+        IDataContext dataContext;
+
+        public AdminController(IDataContext datacontext)
+        {
+            dataContext = datacontext;
+        }
+
+        public AdminController()
+        {
+            dataContext = new DataContext();
+        }
 
         [HttpGet]
         [Route("viewallitems")]
