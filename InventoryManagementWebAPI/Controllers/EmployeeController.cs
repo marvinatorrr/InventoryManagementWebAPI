@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Web.Http;
 using System.Text;
 using InventoryManagementWebAPI.Interfaces;
+using InventoryManagementWebAPI.DTOs;
 
 namespace InventoryManagementWebAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace InventoryManagementWebAPI.Controllers
             Product product = dataContext.Products.Where(x => x.ID == id).FirstOrDefault();
             if(product != null)
             {
-                return Ok(product);
+                return Ok(new ProductDTO(product));
             }
             else
             {
@@ -49,7 +50,7 @@ namespace InventoryManagementWebAPI.Controllers
             Product product = dataContext.Products.Where(x => x.Name == name).FirstOrDefault();
             if (product != null)
             {
-                return Ok(product);
+                return Ok(new ProductDTO(product));
             }
             else
             {
@@ -59,8 +60,9 @@ namespace InventoryManagementWebAPI.Controllers
 
         [HttpPost]
         [Route("receivenewproduct")]
-        public IHttpActionResult ReceiveNewProduct(Product product)
+        public IHttpActionResult ReceiveNewProduct(ProductDTO productdto)
         {
+            Product product = new Product(productdto);
             dataContext.Products.Add(product);
             dataContext.SaveChanges();
             LogTransaction(product, product.quantity, InvoiceType.Shipment);
