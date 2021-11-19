@@ -11,6 +11,8 @@ using InventoryManagementWebAPI.DBContext;
 using System.Linq;
 using System.Collections.Generic;
 using System.Security.Principal;
+using InventoryManagementWebAPI.DTOs;
+using Newtonsoft.Json;
 
 namespace WebAPITest
 {
@@ -20,6 +22,7 @@ namespace WebAPITest
         public void GetProductByID()
         {
             Product product = new Product() { ID = 1, Name = "hammer", quantity = 1, MSRP = 4, BasePrice = 2, Manufacturer = "borsch" };
+            ProductDTO productdto = new ProductDTO(product);
 
             var data = new List<Product>
             {
@@ -37,9 +40,12 @@ namespace WebAPITest
 
             EmployeeController ac = new EmployeeController(mockContext.Object);
             IHttpActionResult res = ac.GetProductByID(1);
-            var contentResult = res as OkNegotiatedContentResult<Product>;
+            var contentResult = res as OkNegotiatedContentResult<ProductDTO>;
 
-            Assert.Equal(product, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(productdto);
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Equal(expected,actual);
         }
 
 
@@ -72,7 +78,7 @@ namespace WebAPITest
         public void GetProductByName()
         {
             Product product = new Product() { ID = 1, Name = "hammer", quantity = 1, MSRP = 4, BasePrice = 2, Manufacturer = "borsch" };
-
+            ProductDTO productdto = new ProductDTO(product);
             var data = new List<Product>
             {
                 product
@@ -89,9 +95,12 @@ namespace WebAPITest
 
             EmployeeController ac = new EmployeeController(mockContext.Object);
             IHttpActionResult res = ac.GetProductByName("hammer");
-            var contentResult = res as OkNegotiatedContentResult<Product>;
+            var contentResult = res as OkNegotiatedContentResult<ProductDTO>;
 
-            Assert.Equal(product, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(productdto);
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -159,7 +168,7 @@ namespace WebAPITest
 
             ac.ControllerContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity("marv"), new string[] { "Employee" });
 
-            IHttpActionResult res = ac.ReceiveNewProduct(product);
+            IHttpActionResult res = ac.ReceiveNewProduct(new ProductDTO(product));
             var contentResult = res as OkNegotiatedContentResult<string>;
 
             Assert.Equal(

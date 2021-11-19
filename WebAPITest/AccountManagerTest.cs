@@ -1,19 +1,16 @@
-using System;
-using Xunit;
 using InventoryManagementWebAPI.Controllers;
-using Moq;
-using InventoryManagementWebAPI.Interfaces;
+using InventoryManagementWebAPI.DBContext;
 using InventoryManagementWebAPI.DBModels;
+using InventoryManagementWebAPI.DTOs;
+using Moq;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Security.Principal;
 using System.Web.Http;
 using System.Web.Http.Results;
-using System.Data.Entity;
-using InventoryManagementWebAPI.DBContext;
-using System.Linq;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Http.Controllers;
-using System.Security.Principal;
-
+using Xunit;
+using Newtonsoft.Json;
 namespace WebAPITest
 {
     public class AccountManagerTest
@@ -36,7 +33,7 @@ namespace WebAPITest
             mockContext.Setup(x => x.Users).Returns(mockSet.Object);
 
             AccountController ac = new AccountController(mockContext.Object);
-            IHttpActionResult res = ac.CreateAccount(new User() { Id = "marv", Name = "marv", Password = "marv", Type = "Employee"});
+            IHttpActionResult res = ac.CreateAccount(new User() { Id = "marv", Name = "marv", Password = "marv", Type = "Employee" });
 
             mockSet.Verify(m => m.Add(It.IsAny<User>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
@@ -69,9 +66,9 @@ namespace WebAPITest
         [Fact]
         public void Login()
         {
-
-
             User user = new User() { Id = "marv" };
+
+            UserDTO userdto = new UserDTO(user);
 
             var data = new List<User>
             {
@@ -92,9 +89,12 @@ namespace WebAPITest
             ac.ControllerContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity("marv"), new string[] { "Employee" });
 
             IHttpActionResult res = ac.Login();
-            var contentResult = res as OkNegotiatedContentResult<User>;
+            var contentResult = res as OkNegotiatedContentResult<UserDTO>;
 
-            Assert.Equal(user, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(userdto);
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Equal(expected,actual);
         }
     }
 }

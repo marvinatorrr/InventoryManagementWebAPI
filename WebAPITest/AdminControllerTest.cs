@@ -2,7 +2,7 @@
 using Xunit;
 using InventoryManagementWebAPI.Controllers;
 using Moq;
-using InventoryManagementWebAPI.Interfaces;
+using InventoryManagementWebAPI.DTOs;
 using InventoryManagementWebAPI.DBModels;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -10,7 +10,7 @@ using System.Data.Entity;
 using InventoryManagementWebAPI.DBContext;
 using System.Linq;
 using System.Collections.Generic;
-
+using Newtonsoft.Json;
 namespace WebAPITest
 {
     public class AdminControllerTest
@@ -19,7 +19,7 @@ namespace WebAPITest
         public void ViewAllItems()
         {
             Product product = new Product() { ID = 1, Name = "hammer", quantity = 1, MSRP = 4, BasePrice = 2, Manufacturer = "borsch" };
-
+            ProductDTO productDTO = new ProductDTO(product);
             var data = new List<Product>
             {
                 product  
@@ -36,9 +36,12 @@ namespace WebAPITest
 
             AdminController ac = new AdminController(mockContext.Object);
             IHttpActionResult res = ac.ViewAllItems();
-            var contentResult = res as OkNegotiatedContentResult<IEnumerable<Product>>;
+            var contentResult = res as OkNegotiatedContentResult<List<ProductDTO>>;
 
-            Assert.Contains(product, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(productDTO);
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Contains(expected, actual);
         }
 
         [Fact]
@@ -100,9 +103,12 @@ namespace WebAPITest
 
             AdminController ac = new AdminController(mockContext.Object);
             IHttpActionResult res = ac.ViewEmployeeTransactions("marv");
-            var contentResult = res as OkNegotiatedContentResult<List<Invoice>>;
+            var contentResult = res as OkNegotiatedContentResult<List<InvoiceDTO>>;
 
-            Assert.Equal(new List<Invoice>() { i1, i2 }, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(new List<InvoiceDTO>() { new InvoiceDTO(i1), new InvoiceDTO(i2) });
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -168,9 +174,12 @@ namespace WebAPITest
 
             AdminController ac = new AdminController(mockContext.Object);
             IHttpActionResult res = ac.ViewDailyTransactions(date);
-            var contentResult = res as OkNegotiatedContentResult<List<Invoice>>;
+            var contentResult = res as OkNegotiatedContentResult<List<InvoiceDTO>>;
 
-            Assert.Equal(new List<Invoice>() { i1, i2 }, contentResult.Content);
+            var expected = JsonConvert.SerializeObject(new List<InvoiceDTO>() { new InvoiceDTO(i1), new InvoiceDTO(i2)});
+            var actual = JsonConvert.SerializeObject(contentResult.Content);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

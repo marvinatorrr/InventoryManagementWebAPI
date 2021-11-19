@@ -11,6 +11,8 @@ using InventoryManagementWebAPI.Auth;
 using System.Web;
 using System.Text;
 using InventoryManagementWebAPI.Interfaces;
+using InventoryManagementWebAPI.DTOs;
+
 namespace InventoryManagementWebAPI.Controllers
 {
     [RoutePrefix("api/account")]
@@ -51,7 +53,9 @@ namespace InventoryManagementWebAPI.Controllers
         public IHttpActionResult Login()
         {
             string id = RequestContext.Principal.Identity.Name;
-            return Ok(dataContext.Users.Where(x => x.Id == id).FirstOrDefault());
+            User user = dataContext.Users.Where(x => x.Id == id).FirstOrDefault();
+            UserDTO userdto = new UserDTO(user);
+            return Ok(userdto);
         }
     }
 }

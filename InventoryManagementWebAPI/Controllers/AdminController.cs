@@ -1,5 +1,6 @@
 ﻿using InventoryManagementWebAPI.DBContext;
 using InventoryManagementWebAPI.DBModels;
+using InventoryManagementWebAPI.DTOs;
 using InventoryManagementWebAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,17 @@ namespace InventoryManagementWebAPI.Controllers
         public IHttpActionResult ViewAllItems()
         {
             IEnumerable<Product> products = dataContext.Products.ToList();
-            if (products.Count() > 0)
+
+            List<ProductDTO> productDTOs = new List<ProductDTO>();
+
+            foreach (Product product in products)
             {
-                return Ok(products);
+                productDTOs.Add(new ProductDTO(product));
+            }
+
+            if (productDTOs.Count() > 0)
+            {
+                return Ok(productDTOs);
             }
             else
             {
@@ -45,7 +54,7 @@ namespace InventoryManagementWebAPI.Controllers
         [Route("viewtransactionsbyemp")]
         public IHttpActionResult ViewEmployeeTransactions(string empID)
         {
-            List<Invoice> invoices = new List<Invoice>();
+            List<InvoiceDTO> invoiceDTOs = new List<InvoiceDTO>();
 
             bool found = false;
             foreach (Invoice invoice in dataContext.Invoices.ToList())
@@ -53,22 +62,23 @@ namespace InventoryManagementWebAPI.Controllers
                 if (invoice.AssociatedEmployee.Id == empID)
                 {
                     found = true;
-                    invoices.Add(invoice);
+                    invoiceDTOs.Add(new InvoiceDTO(invoice));
                 }
             }
+
             if (!found)
             {
                 return BadRequest("No records found");
             }
 
-            return Ok(invoices);
+            return Ok(invoiceDTOs);
         }
 
         [HttpPost]
         [Route("viewtransactionsbydate")]
         public IHttpActionResult ViewDailyTransactions([FromBody] DateTime date)
         {
-            List<Invoice> invoices = new List<Invoice>();
+            List<InvoiceDTO> invoices = new List<InvoiceDTO>();
 
             bool found = false;
             foreach (Invoice invoice in dataContext.Invoices.ToList())
@@ -76,7 +86,7 @@ namespace InventoryManagementWebAPI.Controllers
                 if (invoice.TransactionTime.Date == date)
                 {
                     found = true;
-                    invoices.Add(invoice);
+                    invoices.Add(new InvoiceDTO(invoice));
                 }
             }
             if (!found)

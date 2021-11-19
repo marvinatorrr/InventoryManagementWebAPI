@@ -172,6 +172,9 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DBContext\ContextFactory.cs" />
     <Compile Include="DBContext\DataContext.cs" />
+    <Compile Include="DTOs\InvoiceDTO.cs" />
+    <Compile Include="DTOs\ProductDTO.cs" />
+    <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="DBModels\Invoice.cs" />
     <Compile Include="DBModels\InvoiceType.cs" />
