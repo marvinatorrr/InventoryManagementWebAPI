@@ -74,16 +74,18 @@ namespace InventoryManagementWebAPI.Controllers
             return Ok(invoiceDTOs);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("viewtransactionsbydate")]
-        public IHttpActionResult ViewDailyTransactions([FromBody] DateTime date)
+        public IHttpActionResult ViewDailyTransactions(string date)
         {
+            DateTime dt = DateTime.Parse(date);
+
             List<InvoiceDTO> invoices = new List<InvoiceDTO>();
 
             bool found = false;
             foreach (Invoice invoice in dataContext.Invoices.ToList())
             {
-                if (invoice.TransactionTime.Date == date)
+                if (invoice.TransactionTime.Date == dt.Date)
                 {
                     found = true;
                     invoices.Add(new InvoiceDTO(invoice));
