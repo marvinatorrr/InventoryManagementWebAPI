@@ -17,7 +17,10 @@ namespace InventoryManagementWebAPI.DTOs
         public decimal MSRP { get; set; }
         public int quantity { get; set; }
 
+        public ProductDTO()
+        {
 
+        }
         public ProductDTO(Product product)
         {
             ID = product.ID;
